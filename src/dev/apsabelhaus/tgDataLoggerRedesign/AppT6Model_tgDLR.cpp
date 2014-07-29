@@ -96,7 +96,7 @@ int main(int argc, char** argv)
 
     // T6TensionController* const pTC = new T6TensionController(10000);
 
-    myModel->attach(pTC);
+    //myModel->attach(pTC);
 
     // Finally, attach a data observer if we want to log data
     //tgObserver<T6Model_tgDLR>* myDataObserver = dynamic_cast<tgObserver<T6Model_tgDLR>* >(new tgDataObserverBasic("/home/drew/NTRTsim_logs/tgDLR"));
@@ -109,6 +109,8 @@ int main(int argc, char** argv)
     //myModel->attach(dynamic_cast<tgObserver<T6Model_tgDLR>* const>(myDataObserver));
 
     myModel->attach(myDataObserver);
+
+    myModel->attach(pTC);
 
     // Add model to simulation...
     simulation.addModel(myModel);

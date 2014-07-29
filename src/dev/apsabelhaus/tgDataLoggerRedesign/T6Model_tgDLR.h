@@ -40,7 +40,7 @@ class tgWorld;
 /**
  * Class that creates the six strut "superball" model using tgcreator
  */
-class T6Model_tgDLR : public tgModel
+class T6Model_tgDLR : public tgModel, public tgSubject<T6Model_tgDLR>
 {
 public: 
 	
@@ -99,7 +99,13 @@ public:
      * Note that this uses a DIFFERENT data structure than the superclass,
      * since we need to store our specific observers locally.
      */
-    void attach(tgObserver<T6Model_tgDLR>* pSpecificObserver);
+    //void attach(tgObserver<T6Model_tgDLR>* pSpecificObserver);
+
+    /**
+     * An attach method for observers, which are not typed for this specific
+     * class but instead for the more general tgModel.
+     */
+    //void attach(tgObserver<tgModel>* pGeneralObserver);
 
 private:
 	
@@ -135,7 +141,14 @@ private:
      * Local variables for keeping track of observers that listen on our specific
      * model, NOT the general tgModel.
      */
-    std::vector<tgObserver<T6Model_tgDLR> *> m_specific_observers;
+    //std::vector<tgObserver<T6Model_tgDLR> *> m_specific_observers;
+
+    /**
+     * Local variable to keep track of observers that listen for a general 
+     * tgModel, not just this class specifically.
+     * TODO: combine these, get the polymorphism correct!
+     */
+    //std::vector<tgObserver<tgModel> *> m_general_observers;
 };
 
 #endif  // T6_MODEL_TGDLR_H

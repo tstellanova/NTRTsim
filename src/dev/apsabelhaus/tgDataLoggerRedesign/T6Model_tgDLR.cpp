@@ -100,6 +100,7 @@ T6Model_tgDLR::~T6Model_tgDLR()
 {
 }
 
+/*
 // "attach" method for our specific observers
 void T6Model_tgDLR::attach(tgObserver<T6Model_tgDLR>* pSpecificObserver){
   // check for null pointer
@@ -110,6 +111,20 @@ void T6Model_tgDLR::attach(tgObserver<T6Model_tgDLR>* pSpecificObserver){
       pSpecificObserver->onAttach(*this);
     }
 }
+*/
+
+/*
+// an "attach" method for our general observers
+void attach(tgObserver<tgModel> pGeneralObserver){
+  // null pointer check
+  if (pGeneralObserver){
+    // add to our list
+    m_general_observers.push_back(pGeneralObserver);
+    // notify via onAttach
+    pSpecificObserver->onAttach(*this);
+  }
+}
+*/
 
 void T6Model_tgDLR::addNodes(tgStructure& s)
 {
