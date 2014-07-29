@@ -1,0 +1,60 @@
+Drew Sabelhaus
+7-27-14
+A brief explanation of the tgDataLoggerRedesign
+
+Differences with prior version:
+
+1) tgDataObserver classes are now proper observers: they get attach()ed to a model
+   in the App file. This is better than the previous way we did things, which was
+   to have the controller call the logger - which doesn't make sense, we'd want to 
+   log data from a model independently of whatever controller we use.
+
+2) There is now an abstract class of type tgLoggable, which is implemented by any
+   concrete class with data to output. See below: this is not only limited to
+   rigid bodies and strings, but also can include controllers if we want to log
+   debugging information!!
+
+3) There are now multiple types of tgDataObserver(s) and tgDataLogger(s), but NONE
+   of them have model-specific information in them (unlike before, where we had 
+   hard-coded what to expect from different models.) Specifically, the structure
+   now is...
+
+   - tgDataObserverBasic (or another type of tgDataObserver) is attached in App.
+     This class, like before, creates the log file and the header in the log file.
+     However, it does so by first creating mutliple logger classes (see below)
+     for different types of tgLoggable objects, querying the model for its 
+     tgLoggable objects, then having each Loggable append a section of the header.
+
+   - on notifyStep(), the Observer asks the model for all its tgLoggables, then
+     passes them into the appropriate data logger.
+
+   - tgDataLoggerRodBasic (or other types of loggers) are called by the Observer
+     on notifyStep() to output data. Here, after matching up the specific class
+     of the object, the data logger queries some subset of information from the
+     Loggable, then writes it to our log file.
+
+This framework has a couple very neat and interesting properties. For example...
+
+i) We can easily interchange different levels of verbosity when logging. For
+   example, see tgDataObserverBasic and tgDataObserverFullState: These two 
+   observers are similar except for their choice of tgDataLoggerRod! One
+   saves just the center of mass of the rods, the other saves euler angles too.
+
+ii) This is completely independent of the model. The number of rigid bodies,
+    strings, etc. is automatically calculated and logged appropriately.
+
+iii) We can turn on or off data logging very easily: in the App file, where it
+     makes most sense, just comment or uncomment the lines that create the Observer
+     and make sure not to attach() it to the model.
+
+iii) We can log data for controllers if we want! For example, maybe we want to
+     know of a force calculation inside a controller to see if we implemented it
+     correctly. Then, we'd just make a controller that implements tgLoggable, and
+     make sure the tgModel checks its controller for Loggable-ity when returning
+     a list of tgLoggable objects to the observer.
+
+**** DREW TO-DO
+
+- Change from model.getDescendants to model.getLoggables or whatever
+- Fix the template thing with <T6Model> versus <tgModel>
+- Create everything related to mutliple loggers: checking of object types, 

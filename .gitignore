@@ -2,3 +2,4 @@ env
 build
 conf/install.conf
 src/DoxyDocs
+*~
